@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo "Compile and build the code for testing and deployment using automation tool Maven"
+            }
+        }
+        
+        stage('Unit and Integration Tests') {
+            steps {
+                echo"Validate the functionality of codes through unit tests and Integration tests using Cypress"
+            }
+            post {
+                success{
+                   emailext (
+                            to: "jananig30@gmail.com",
+                            subject: "Status of Build",
+                            body: "Test successfully passed!",
+                            attachLog: true
+                            )
+                         }
+                failure{
+                   emailext (
+                            to: "jananig30@gmail.com",
+                            subject: "Status of Build",
+                            body: "Oops, Unfortunately this test failed!",
+                            attachLog: true 
+                            )
+
+                        }
+            }
+        }
+        
+        stage('Code Analysis') {
+            steps {
+                echo"Analysed the code to verify the coding standards using ESLint"
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                echo "Assessed security vulnerability in the code using Nessus"
+            }
+           post {
+                success{
+                   emailext (
+                            to: "jananig30@gmail.com",
+                            subject: "Status of Build",
+                            body: "Security scan successfully passed",
+                            attachLog: true
+                            )
+        
+                        }
+                failure{
+                   emailext(
+                            to: "jananig30@gmail.com",
+                            subject: "Status of Build",
+                            body: "Oops! Unfortunately, the Security scan failed",
+                            attachLog: true
+                            )
+        
+                        }
+            }
+        }   
+        stage('Deploy to Staging') {
+            steps {
+                echo"Deployed the application using AWS EC2 Instance to staging server"
+            }
+        }
+        
+        stage('Integration Tests on Staging') {
+            steps {
+                echo"Verified the behaviour through integration tests on the application"
+            }
+        }
+        
+        stage('Deploy to Production') {
+            steps {
+               echo "Deployed the application using AWS EC2 instance to production server"
+            }
+        }
+    }
+    
+}
