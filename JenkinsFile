@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Compile and build the code for testing and deployment using automation tool Maven"
+                echo "Compile and build  the code for testing and deployment using automation tool Maven"
             }
         }
         
